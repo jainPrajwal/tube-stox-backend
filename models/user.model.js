@@ -1,5 +1,4 @@
 const mongoose = require(`mongoose`);
-require(`mongoose-type-url`);
 const { getRequiredValidationMessage } = require("../utils/common.utils");
 
 const { Schema } = mongoose;

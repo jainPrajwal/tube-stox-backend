@@ -3,6 +3,11 @@ const { getRequiredValidationMessage } = require("../utils/common.utils");
 const { Schema } = mongoose;
 
 const VideoSchema = new Schema({
+  url: {
+    type: String,
+    required: getRequiredValidationMessage(`URL `),
+    unique: true
+  },
   title: {
     type: String,
     required: getRequiredValidationMessage(`title `),
