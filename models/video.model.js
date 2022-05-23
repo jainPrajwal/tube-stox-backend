@@ -31,7 +31,11 @@ const VideoSchema = new Schema({
     type: String,
     required: getRequiredValidationMessage(`Category `),
   },
-})
+  publisher: {
+    type: Schema.Types.ObjectId,
+    ref: `user`,
+  },
+});
 const VideoModel = new mongoose.model(`video`, VideoSchema);
 
 module.exports = { VideoModel };
