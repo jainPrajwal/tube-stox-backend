@@ -1,8 +1,8 @@
 const mongoose = require(`mongoose`);
-const { getRequiredValidationMessage } = require("./utils/common.utils");
+const { getRequiredValidationMessage } = require("../utils/common.utils");
 const { Schema } = mongoose;
 
-const VideoSchema = {
+const VideoSchema = new Schema({
   title: {
     type: String,
     required: getRequiredValidationMessage(`title `),
@@ -31,8 +31,7 @@ const VideoSchema = {
     type: String,
     required: getRequiredValidationMessage(`Category `),
   },
-};
-
+})
 const VideoModel = new mongoose.model(`video`, VideoSchema);
 
 module.exports = { VideoModel };
