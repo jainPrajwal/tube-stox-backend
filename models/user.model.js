@@ -11,6 +11,7 @@ const UserSchema = new Schema({
   email: {
     type: String,
     required: getRequiredValidationMessage(`email `),
+    unique: true
   },
   password: {
     type: String,
