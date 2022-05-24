@@ -18,8 +18,8 @@ router
     } catch (error) {
       console.error(`some error occured while getting videos from DB`, error);
       res.json({
-        status: 500,
-        success: false,
+        ...RESPONSE.INTERNAL_SERVER_ERROR,
+      
         message: `some error occured while getting videos from DB`,
         errorMessage: error.errorMessage,
       });
@@ -45,7 +45,7 @@ router
       }
     } catch (error) {
       res.json({
-        status: 500,
+        ...RESPONSE.INTERNAL_SERVER_ERROR,
         success: true,
         message: `something went wrong while saving video to DB`,
       });
