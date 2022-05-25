@@ -8,12 +8,12 @@
 
 
      /playlists/:playlistId/videos/:videoId POST update a video in playlist DONE
-     /playlists/:playlistId/videos/:videoId DELETE delete a video in playlist
+     /playlists/:playlistId/videos/:videoId DELETE delete a video in playlist DONE
 
      /videos GET all videos FOR ALL USER DONE
      /videos POST CREATE video by user USER DONE
-     /videos/:videoId POST UPDATE video with videoId
-     /videos/:videoId DELETE video with videoId (Only if he is the publisher of that video)
+     /videos/:videoId POST UPDATE video with videoId DONE
+     /videos/:videoId DELETE video with videoId (Only if he is the publisher of that video) DONE
 
 
      /videos/:videoId/notes GET all notes on that video by user USER
@@ -21,7 +21,7 @@
      /videos/:videoId/notes/:noteId POST UPDATE notes on that video by notesId
 
 
-     /profile GET all videos, GET all playlists USER 
+     /profile GET all videos, GET all playlists USER DONE
      /profile POST UPDATE user profile USER 
 
      /login POST Login In User USER DONE

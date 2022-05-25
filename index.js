@@ -9,6 +9,7 @@ const { router: videos } = require(`./routers/videos.router`);
 const { router: playlists } = require("./routers/playlists.router");
 const { router: signup } = require(`./routers/signup.router`);
 const { router: login } = require("./routers/login.router");
+const { router: profile } = require(`./routers/profile.router`);
 
 const { authVerify } = require(`./middlewares/auth.middleware`);
 dotenv.config();
@@ -28,6 +29,7 @@ app.use(`/videos`, videos);
 app.use(`/playlists`, authVerify, playlists);
 app.use(`/signup`, signup);
 app.use(`/login`, login);
+app.use(`/profile`, authVerify, profile);
 
 app.listen(PORT, () => {
   console.log(`running on port`, PORT);
