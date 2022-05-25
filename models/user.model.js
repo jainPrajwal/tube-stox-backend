@@ -11,7 +11,7 @@ const UserSchema = new Schema({
   email: {
     type: String,
     required: getRequiredValidationMessage(`email `),
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
@@ -20,6 +20,10 @@ const UserSchema = new Schema({
   avatar: {
     type: String,
     default: `yellow`,
+  },
+  isAPremiumMember: {
+    type: Boolean,
+    default: false,
   },
 });
 

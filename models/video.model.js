@@ -6,7 +6,8 @@ const VideoSchema = new Schema({
   url: {
     type: String,
     required: getRequiredValidationMessage(`URL `),
-    unique: true
+    unique: true,
+    immutable: true,
   },
   title: {
     type: String,
@@ -39,6 +40,10 @@ const VideoSchema = new Schema({
   publisher: {
     type: Schema.Types.ObjectId,
     ref: `user`,
+  },
+  isPremium: {
+    type: Boolean,
+    default: false,
   },
 });
 const VideoModel = new mongoose.model(`video`, VideoSchema);
