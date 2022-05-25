@@ -20,6 +20,7 @@ const PlaylistSchema = new Schema({
     type: String,
     enum: [`history`, `watchlater`, `liked`, `custom`],
     default: `custom`,
+    unique: true
   },
   isDefault: {
     type: Boolean,
