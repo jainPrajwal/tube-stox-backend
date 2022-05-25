@@ -10,8 +10,8 @@ const getNormalizedVideoDetails = (arr = getVideoDetails()) => {
         const {
           data: { items },
         } = response;
-        completedPromises+=1;
-        items.forEach((item,) => {
+        completedPromises += 1;
+        items.forEach((item) => {
           delete item[`kind`];
           delete item[`etag`];
           delete item[`snippet`][`categoryId`];
@@ -28,9 +28,10 @@ const getNormalizedVideoDetails = (arr = getVideoDetails()) => {
             channelId: item.snippet.channelId,
             duration: item.contentDetails.duration,
             publisher:
-            completedPromises % 2 === 0
+              completedPromises % 2 === 0
                 ? `628cdc97496dc17e7ee51cb9`
                 : `628cdca6496dc17e7ee51cc2`,
+            isPremium: completedPromises % 4 === 0,
           };
           finalArray.push(normalizedObject);
         });
