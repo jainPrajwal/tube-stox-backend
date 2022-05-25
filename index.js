@@ -8,6 +8,7 @@ const cors = require(`cors`);
 const { router: videos } = require(`./routers/videos.router`);
 const { router: playlists } = require("./routers/playlists.router");
 const { router: signup } = require(`./routers/signup.router`);
+const { router: login } = require("./routers/login.router");
 
 const { authVerify } = require(`./middlewares/auth.middleware`);
 dotenv.config();
@@ -26,6 +27,7 @@ app.get(`/`, (req, res) => {
 app.use(`/videos`, videos);
 app.use(`/playlists`, authVerify, playlists);
 app.use(`/signup`, signup);
+app.use(`/login`, login);
 
 app.listen(PORT, () => {
   console.log(`running on port`, PORT);
