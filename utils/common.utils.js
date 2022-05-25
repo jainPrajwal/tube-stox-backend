@@ -21,6 +21,10 @@ const RESPONSE = {
     success: false,
     message: `user not authenticated. Invalid token`,
   },
+  NOT_FOUND: {
+    status: 404,
+    success: false,
+  }
 };
 
 module.exports = { getRequiredValidationMessage, RESPONSE };
