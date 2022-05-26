@@ -18,7 +18,7 @@
 
      /videos/:videoId/notes GET all notes on that video by user USER
      /videos/:videoId/notes POST CREATE notes on that video by user USER
-     /videos/:videoId/notes/:noteId POST UPDATE notes on that video by notesId
+     /videos/:videoId/notes/:noteId POST UPDATE notes on that video by notesId USER
 
 
      /profile GET all videos, GET all playlists USER DONE
