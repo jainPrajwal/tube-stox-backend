@@ -24,7 +24,9 @@ const RESPONSE = {
   NOT_FOUND: {
     status: 404,
     success: false,
-  }
+  },
 };
 
-module.exports = { getRequiredValidationMessage, RESPONSE };
+const options = { timestamps: true };
+
+module.exports = { getRequiredValidationMessage, RESPONSE, options };
