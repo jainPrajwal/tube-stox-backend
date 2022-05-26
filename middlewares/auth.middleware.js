@@ -26,7 +26,7 @@ const authVerify = async (req, res, next) => {
   } catch (error) {
     res.json({
       ...RESPONSE.INTERNAL_SERVER_ERROR,
-      message: `somehting went wrong while searching for user in DB`,
+      message: `something went wrong while searching for user in DB`,
       errorMessage: error.message,
     });
   }

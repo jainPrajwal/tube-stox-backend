@@ -1,265 +1,32 @@
 const express = require(`express`);
 const router = express.Router();
-const { VideoModel } = require("../models/video.model");
-const { UserModel } = require("../models/user.model");
-const { RESPONSE } = require("../utils/common.utils");
 const { authVerify } = require("../middlewares/auth.middleware");
-const { NoteModel } = require("../models/note.model");
+const {
+  getAllVideosHandler,
+  saveVideoHandler,
+  getVideoByVideoIdHandler,
+  updateVideoDetailsHandler,
+} = require("../controllers/videos.controller");
+const {
+  getNotesForAVideoHandler,
+  saveNoteHandler,
+  updateNoteHandler,
+} = require("../controllers/notes.controller");
 
 router
   .route(`/`)
-  .get(async (req, res) => {
-    try {
-      let {
-        query: { pageNo, limit },
-      } = req;
-      pageNo = Number(pageNo);
-      limit = Number(limit);
-
-      const startIndex = (pageNo - 1) * limit;
-      const endIndex = pageNo * limit;
-      let pagination = { next: null, previous: null, limit };
-
-      if (startIndex > 0) {
-        pagination.previous = pageNo - 1;
-      }
-      if (endIndex < (await VideoModel.estimatedDocumentCount())) {
-        pagination.next = pageNo + 1;
-      }
-
-      let videos = await VideoModel.find({})
-        .populate(`publisher`)
-        .limit(limit)
-        .skip(startIndex);
-
-      res.json({
-        status: 200,
-        success: true,
-        message: `videos fetched sucessfully`,
-        videos,
-        pagination,
-      });
-    } catch (error) {
-      console.error(`some error occured while getting videos from DB`, error);
-      res.json({
-        ...RESPONSE.INTERNAL_SERVER_ERROR,
-
-        message: `some error occured while getting videos from DB`,
-        errorMessage: error.errorMessage,
-      });
-    }
-  })
-  .post(authVerify, async (req, res) => {
-    let { video } = req.body;
-    const { user } = req;
-    try {
-      if (video) {
-        video.publisher = user._id;
-        let savedVideo = await new VideoModel(video).save();
-        res.json({
-          status: 201,
-          success: true,
-          message: `video saved to database succesfully`,
-          video: savedVideo,
-        });
-      } else {
-        res.json({
-          status: 400,
-          success: false,
-          message: `The request could not be understood by the server due to malformed syntax.`,
-        });
-      }
-    } catch (error) {
-      res.json({
-        ...RESPONSE.INTERNAL_SERVER_ERROR,
-        success: true,
-        message: `something went wrong while saving video to DB`,
-        errorMessage: error.message,
-      });
-    }
-  });
+  .get(getAllVideosHandler())
+  .post(authVerify, saveVideoHandler());
 
 router
   .route("/:videoId")
-  .get(async (req, res) => {
-    const {
-      params: { videoId },
-    } = req;
-    try {
-      const foundVideo = await VideoModel.findOne({ _id: videoId });
-      if (foundVideo) {
-        res.json({
-          status: 200,
-          success: false,
-          message: `Video fetched Successfully`,
-          video: foundVideo,
-        });
-        return;
-      }
-      res.json({
-        ...RESPONSE.NOT_FOUND,
-        message: `Video not found`,
-      });
-    } catch (error) {
-      res.json({
-        ...RESPONSE.INTERNAL_SERVER_ERROR,
-        message: `somehting went wrong while fethcing video`,
-        errorMessage: error.message,
-      });
-    }
-  })
-  .post(authVerify, async (req, res) => {
-    const {
-      params: { videoId },
-      user,
-      body: { video },
-    } = req;
-    try {
-      const updatedVideo = await VideoModel.findOneAndUpdate(
-        {
-          _id: videoId,
-          publisher: user._id,
-        },
-        { ...video },
-        { new: true }
-      );
-
-      if (updatedVideo) {
-        res.json({
-          status: 201,
-          success: true,
-          message: `Video Edited Successfully`,
-          video: updatedVideo,
-        });
-        return;
-      }
-      res.json({
-        ...RESPONSE.NOT_FOUND,
-        message: `video not found`,
-      });
-    } catch (error) {
-      res.json({
-        ...RESPONSE.INTERNAL_SERVER_ERROR,
-        message: `somehting went wrong while editing video details`,
-        errorMessage: error.message,
-      });
-    }
-  });
+  .get(getVideoByVideoIdHandler())
+  .post(authVerify, updateVideoDetailsHandler());
 
 router
   .route(`/:videoId/notes`)
-  .get(authVerify, async (req, res) => {
-    const {
-      params: { videoId },
-      user,
-    } = req;
+  .get(authVerify, getNotesForAVideoHandler())
+  .post(authVerify, saveNoteHandler());
 
-    try {
-      const notes = await NoteModel.find({ video: videoId, user: user._id });
-      res.json({
-        status: 200,
-        success: true,
-        message: `notes fetched successfully from DB`,
-        notes,
-      });
-    } catch (error) {
-      res.json({
-        ...RESPONSE.INTERNAL_SERVER_ERROR,
-        message: `somehting went wrong while fetching notes from DB`,
-        errorMessage: error.message,
-      });
-    }
-  })
-  .post(authVerify, async (req, res) => {
-    const {
-      params: { videoId },
-      body: { note },
-      user
-    } = req;
-    if (!note) {
-      res.json({
-        ...RESPONSE.MALFORMED_SYNTAX,
-        message: `Invalid note sent`,
-      });
-      return;
-    }
-
-    try {
-      note.user = user._id;
-      note.video = videoId;
-      const savedNote = await new NoteModel({ ...note }).save();
-      res.json({
-        status: 201,
-        success: true,
-        message: `note created succesfully`,
-        note: savedNote,
-      });
-    } catch (error) {
-      res.json({
-        ...RESPONSE.INTERNAL_SERVER_ERROR,
-        message: `somehtibng went wrong while saving note to the DB`,
-        errorMessage: error.message,
-      });
-    }
-  });
-
-router
-  .route(`/:videoId/notes/:noteId`)
-  .get( async (req, res) => {
-    const {
-      params: { noteId },
-      user,
-    } = req;
-
-    try {
-      const note = await NoteModel.find({ _id: noteId });
-      res.json({
-        status: 200,
-        success: true,
-        message: `note fetched successfully`,
-        note,
-      });
-    } catch (error) {
-      res.json({
-        ...RESPONSE.INTERNAL_SERVER_ERROR,
-        message: `somehting went wrong while fethcing note from DB`,
-        errorMessage: error.message,
-      });
-    }
-  })
-  .post(async (req, res) => {
-    const {
-      params: { videoId, noteId },
-      user,
-      body: { note },
-    } = req;
-
-    if (!note) {
-      res.json({
-        ...RESPONSE.MALFORMED_SYNTAX,
-        message: `Invalid note sent`,
-      });
-
-      return;
-    }
-    try {
-      const updatedNote = await NoteModel.findOneAndUpdate(
-        { _id: noteId },
-        { ...note },
-        { new: true }
-      );
-
-      res.json({
-        status: 200,
-        message: `Note updated successfully`,
-        note: updatedNote,
-      });
-    } catch (error) {
-      res.json({
-        ...RESPONSE.INTERNAL_SERVER_ERROR,
-        message: `something went wrong while updating the note`,
-        errorMessage: error.message,
-      });
-    }
-  });
+router.route(`/:videoId/notes/:noteId`).post(updateNoteHandler());
 module.exports = { router };
