@@ -1,6 +1,6 @@
 const mongoose = require(`mongoose`);
 require(`mongoose-type-url`)
-const { getRequiredValidationMessage } = require("../utils/common.utils");
+const { getRequiredValidationMessage, options } = require("../utils/common.utils");
 const { Schema } = mongoose;
 
 const PlaylistSchema = new Schema({
@@ -36,7 +36,8 @@ const PlaylistSchema = new Schema({
       ref: `video`,
     },
   ],
-});
+},
+options);
 
 const PlaylistModel = new mongoose.model(`playlist`, PlaylistSchema);
 
