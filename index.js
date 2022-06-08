@@ -31,6 +31,6 @@ app.use(`/signup`, signup);
 app.use(`/login`, login);
 app.use(`/profile`, authVerify, profile);
 
-app.listen(PORT, () => {
+app.listen(process.env.PORT || PORT, () => {
   console.log(`running on port`, PORT);
 });
