@@ -1,17 +1,15 @@
-const express = require(`express`);
-const bcrypt = require(`bcrypt`);
 const jwt = require(`jsonwebtoken`);
 const { UserModel } = require("../models/user.model");
 const { RESPONSE } = require("../utils/common.utils");
 
 const authVerify = async (req, res, next) => {
-  const token = req.headers.authorization.split(` `)[1];
-  console.log(`token found`, token);
+  const token = req.headers.authorization?.split(` `)[1];
+ 
   if (!token) {
     res.json(RESPONSE.UNAUTHENTICATED_USER);
     return;
   }
-  console.log(`env`, process.env.mySecret);
+  
   try {
     const { _id: userId } = jwt.verify(token, process.env.mySecret);
 
