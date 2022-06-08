@@ -1,7 +1,7 @@
 {
-  "name": "tube-stox-backend",
+  "name": "video-library-backend",
   "version": "1.0.0",
-  "description": "BackEnd for Tube Stox Video Library App",
+  "description": "BackEnd for video-library Ecommerce App",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
