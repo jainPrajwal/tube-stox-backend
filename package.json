@@ -18,5 +18,20 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.4",
     "mongoose-type-url": "^2.1.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jainPrajwal/tube-stox-backend.git"
+  },
+  "keywords": [
+    "node",
+    "js",
+    "backend",
+    "heroku"
+  ],
+  "bugs": {
+    "url": "https://github.com/jainPrajwal/tube-stox-backend/issues"
+  },
+  "homepage": "https://github.com/jainPrajwal/tube-stox-backend#readme"
 }
