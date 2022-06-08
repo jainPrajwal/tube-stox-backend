@@ -12,6 +12,10 @@ const { router: login } = require("./routers/login.router");
 const { router: profile } = require(`./routers/profile.router`);
 
 const { authVerify } = require(`./middlewares/auth.middleware`);
+const {
+  routeNotFoundHandler,
+} = require("./middlewares/route-not-found.middleware");
+const { errorHandler } = require("./middlewares/error.middleware");
 dotenv.config();
 
 app.use(express.json());
@@ -31,6 +35,10 @@ app.use(`/signup`, signup);
 app.use(`/login`, login);
 app.use(`/profile`, authVerify, profile);
 
+// DONT MOVE
+app.use(routeNotFoundHandler);
+
+app.use(errorHandler);
 app.listen(process.env.PORT || PORT, () => {
   console.log(`running on port`, PORT);
 });
