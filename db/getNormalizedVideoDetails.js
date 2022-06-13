@@ -4,7 +4,7 @@ const getNormalizedVideoDetails = (arr = getVideoDetails()) => {
   let finalArray = [];
   let completedPromises = 0;
   return new Promise((resolve, reject) => {
-    arr.forEach(async (promise, outerIndex) => {
+    arr.forEach(async (promise) => {
       try {
         const response = await promise.videoPromise;
         const {
@@ -26,6 +26,8 @@ const getNormalizedVideoDetails = (arr = getVideoDetails()) => {
             title: item.snippet.title,
             description: item.snippet.description,
             channelId: item.snippet.channelId,
+            channelTitle: item.snippet.channelTitle,
+            thumbnails: item.snippet.thumbnails,
             duration: item.contentDetails.duration,
             publisher:
               completedPromises % 2 === 0
@@ -40,7 +42,7 @@ const getNormalizedVideoDetails = (arr = getVideoDetails()) => {
           resolve(finalArray);
         }
       } catch (error) {
-        console.log(`error`, error.message);
+        console.log(`error`, error.message, promise.videoPromise);
         reject(error);
       }
     });

@@ -29,7 +29,7 @@ function getProfileHandler() {
           name: user.name,
           email: user.email,
           avatar: user.avatar,
-          isAPremiumUser: user.isAPremiumUser,
+          isAPremiumMember: user.isAPremiumMember,
         },
       });
     } catch (error) {

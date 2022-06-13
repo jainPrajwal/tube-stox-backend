@@ -33,6 +33,12 @@ const VideoSchema = new Schema(
       type: String,
       required: getRequiredValidationMessage(`Channel Id `),
     },
+    channelTitle: {
+      type: String,
+    },
+    thumbnails: {
+      type: Array,
+    },
     duration: {
       type: String,
       required: getRequiredValidationMessage(`Duration `),
@@ -48,6 +54,9 @@ const VideoSchema = new Schema(
     isPremium: {
       type: Boolean,
       default: false,
+    },
+    originallyCreatedBy: {
+      type: String,
     },
   },
   options

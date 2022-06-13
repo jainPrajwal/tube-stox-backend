@@ -1,8 +1,6 @@
 const mongoose = require(`mongoose`);
 const { VideoModel } = require("../models/video.model");
 const { getNormalizedVideoDetails } = require("./getNormalizedVideoDetails");
-const axios = require("axios").default;
-// const PRODUCTION_URL =
 
 const intiliazeDatabase = async () => {
   try {
@@ -10,11 +8,18 @@ const intiliazeDatabase = async () => {
     const db = mongoose.connection;
     db.once(`connected`, async () => {
       if ((await VideoModel.estimatedDocumentCount()) <= 5) {
-        const videos = await getNormalizedVideoDetails();
-        console.log(`videos`, videos.length);
-        const response = await createModels(videos);
-        if(response) {
-          console.log(`success`)
+        try {
+          const videos = await getNormalizedVideoDetails();
+          try {
+            const response = await createModels(videos);
+            if (response) {
+              console.log(`success`);
+            }
+          } catch (error) {
+            console.error(`error while creating models`, error);
+          }
+        } catch (error) {
+          console.error(`error while getting normailzedData`, error);
         }
       }
     });
@@ -26,7 +31,9 @@ const intiliazeDatabase = async () => {
 };
 
 module.exports = { intiliazeDatabase };
+
 function createModels(videos) {
+  console.log(`creating models`);
   let modelsCreated = 0;
   return new Promise((resolve, reject) => {
     videos.forEach(async (video) => {
@@ -38,4 +45,3 @@ function createModels(videos) {
     });
   });
 }
-

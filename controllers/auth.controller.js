@@ -114,25 +114,31 @@ function loginUser() {
       try {
         const foundUser = await UserModel.findOne({ email: user.email });
 
-        const isPasswordValid = await bcrypt.compare(
-          user.password,
-          foundUser.password
-        );
-        if (!isPasswordValid) {
+        if (foundUser) {
+          const isPasswordValid = await bcrypt.compare(
+            user.password,
+            foundUser.password
+          );
+          if (!isPasswordValid) {
+            res.json({
+              ...RESPONSE.UNAUTHENTICATED_USER,
+              message: `Invalid Password`,
+            });
+            return;
+          }
+
+          const token = jwt.sign({ _id: foundUser._id }, process.env.mySecret);
+          res.json({
+            status: 201,
+            success: true,
+            message: `Login Successful`,
+            token,
+          });
+        } else
           res.json({
             ...RESPONSE.UNAUTHENTICATED_USER,
-            message: `Invalid Password`,
+            message: `Invalid Email`,
           });
-          return;
-        }
-
-        const token = jwt.sign({ _id: foundUser._id }, process.env.mySecret);
-        res.json({
-          status: 201,
-          success: true,
-          message: `Login Successful`,
-          token,
-        });
       } catch (error) {
         res.json({
           ...RESPONSE.INTERNAL_SERVER_ERROR,
