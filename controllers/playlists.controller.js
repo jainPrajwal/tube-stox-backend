@@ -12,11 +12,21 @@ function getPlaylistOfAUserHandler() {
       const playlists = await PlaylistModel.find({ owner: user._id }).populate(
         `videos`
       );
+      const formattedPlaylists = playlists.reduce((acc, current) => {
+        return {
+          ...acc,
+          [current.type]:
+            current.type === `custom`
+              ? acc[current.type] ? [...acc[current.type] ,current] : [current]
+              : current
+        };
+      }, {});
+     
       res.json({
         status: 200,
         success: true,
         message: `playlists fetched successfully`,
-        playlists,
+        playlists: formattedPlaylists,
       });
     } catch (error) {
       res.json({
