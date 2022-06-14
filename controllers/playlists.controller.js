@@ -1,4 +1,5 @@
 const { PlaylistModel } = require("../models/playlist.model");
+const { VideoModel } = require("../models/video.model");
 const { RESPONSE } = require("../utils/common.utils");
 
 function getPlaylistOfAUserHandler() {
