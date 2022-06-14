@@ -26,7 +26,7 @@ function getPlaylistOfAUserHandler() {
         status: 200,
         success: true,
         message: `playlists fetched successfully`,
-        playlists: formattedPlaylists,
+        playlists,
       });
     } catch (error) {
       res.json({
