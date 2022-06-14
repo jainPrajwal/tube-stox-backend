@@ -6,7 +6,7 @@
 
      /playlists/:type/videos GET all the videos type of playlist for user DONE
 
-
+     /playlists/:playlistId/videos/ CREATE video in a playlist
      /playlists/:playlistId/videos/:videoId POST update a video in playlist DONE
      /playlists/:playlistId/videos/:videoId DELETE delete a video in playlist DONE
 

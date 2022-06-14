@@ -18,11 +18,13 @@ function getPlaylistOfAUserHandler() {
           ...acc,
           [current.type]:
             current.type === `custom`
-              ? acc[current.type] ? [...acc[current.type] ,current] : [current]
-              : current
+              ? acc[current.type]
+                ? [...acc[current.type], current]
+                : [current]
+              : current,
         };
       }, {});
-     
+
       res.json({
         status: 200,
         success: true,
@@ -210,7 +212,7 @@ function updateVideoInAPlaylistHandler() {
         status: 201,
         success: true,
         message: `Playlist Updated Succesfully`,
-        playlist: await updatedPlaylist.populate("videos"),
+        video,
       });
     } catch (error) {
       res.json({
@@ -251,13 +253,57 @@ function deleteVideoInAPlaylistHandler() {
       (_id) => _id.toString() !== videoId
     );
     foundPlaylist.videos = updatedVideosList;
-    const updatedPLaylist = await foundPlaylist.save();
+    await foundPlaylist.save();
     res.json({
       status: 200,
       success: true,
       message: `Video Deleted Successfully`,
-      playlist: updatedPLaylist,
     });
+  };
+}
+
+function saveVideoInAPlaylistHandler() {
+  return async (req, res) => {
+    const {
+      body: { video },
+      params: { playlistId },
+    } = req;
+
+    if (!video) {
+      res
+        .status(RESPONSE.MALFORMED_SYNTAX.status)
+        .json(RESPONSE.MALFORMED_SYNTAX);
+      return;
+    }
+    try {
+      const foundPlaylist = await PlaylistModel.findOne({ _id: playlistId });
+      if (!foundPlaylist) {
+        res.status(RESPONSE.NOT_FOUND.status).json({
+          ...RESPONSE.NOT_FOUND,
+          message: `Playlist not found!`,
+        });
+        return;
+      }
+
+      const updatedVideos = foundPlaylist.videos.concat(video);
+      foundPlaylist.videos = updatedVideos;
+
+      await foundPlaylist.save();
+
+      res.status(200).json({
+        status: 200,
+        success: true,
+        message: `Video Saved to Playlist Successfully`,
+        video,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(RESPONSE.INTERNAL_SERVER_ERROR.status).json({
+        ...RESPONSE.INTERNAL_SERVER_ERROR,
+        message: `somehting went wrong while finding your playlist`,
+        errorMessage: error.message,
+      });
+    }
   };
 }
 
@@ -306,4 +352,5 @@ module.exports = {
   updateVideoInAPlaylistHandler,
   deleteVideoInAPlaylistHandler,
   getSpecifiedTypeOfVideosHandler,
+  saveVideoInAPlaylistHandler,
 };
