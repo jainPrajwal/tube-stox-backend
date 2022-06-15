@@ -258,6 +258,7 @@ function deleteVideoInAPlaylistHandler() {
       status: 200,
       success: true,
       message: `Video Deleted Successfully`,
+      video,
     });
   };
 }
