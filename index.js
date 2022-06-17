@@ -16,10 +16,11 @@ const {
   routeNotFoundHandler,
 } = require("./middlewares/route-not-found.middleware");
 const { errorHandler } = require("./middlewares/error.middleware");
-
 dotenv.config();
+
 app.use(express.json());
-app.use(cors());
+app.options('*', cors()); 
+
 intiliazeDatabase();
 app.get(`/`, (req, res) => {
   res.json({
