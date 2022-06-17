@@ -19,7 +19,7 @@ const { errorHandler } = require("./middlewares/error.middleware");
 dotenv.config();
 
 app.use(express.json());
-app.options('*', cors()); 
+app.use(cors()); 
 
 intiliazeDatabase();
 app.get(`/`, (req, res) => {
