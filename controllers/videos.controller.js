@@ -1,7 +1,8 @@
 const { VideoModel } = require("../models/video.model");
 const { RESPONSE } = require("../utils/common.utils");
 const {
-  getTotalCountOfVideosInDatabase, saveVideo,
+  getTotalCountOfVideosInDatabase,
+  saveVideo,
 } = require("../utils/videos.utils");
 
 function getAllVideosHandler() {

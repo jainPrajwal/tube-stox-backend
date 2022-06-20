@@ -5,7 +5,7 @@ const getVideoByVideoId = async (videoId) => {
 };
 
 const saveVideo = async (video) => {
-  return await new VideoModel.save(video);
+  return await VideoModel(video).save();
 };
 
 
