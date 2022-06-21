@@ -3,6 +3,7 @@ const { RESPONSE } = require("../utils/common.utils");
 const {
   getTotalCountOfVideosInDatabase,
   saveVideo,
+  getVideoByVideoId,
 } = require("../utils/videos.utils");
 
 function getAllVideosHandler() {
