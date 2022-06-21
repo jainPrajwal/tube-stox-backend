@@ -119,7 +119,7 @@ function updateVideoDetailsHandler() {
       body: { video },
     } = req;
     try {
-      const updatedVideo = await VideoModel.findOneAndUpdate(
+      const updatedVideoWhenUserIsAnOwner = await VideoModel.findOneAndUpdate(
         {
           _id: videoId,
           publisher: user._id,
@@ -128,15 +128,51 @@ function updateVideoDetailsHandler() {
         { new: true }
       );
 
-      if (updatedVideo) {
+      console.log(`this should be blank`, updatedVideoWhenUserIsAnOwner)
+
+      if (updatedVideoWhenUserIsAnOwner) {
         res.json({
           status: 201,
           success: true,
           message: `Video Edited Successfully`,
-          video: updatedVideo,
+          video: updatedVideoWhenUserIsAnOwner,
         });
         return;
+      } else {
+        if (Object.keys(video).length > 1) {
+          res.status(401).json({
+            status: 401,
+            success: false,
+            message: `unauthorized action`,
+          });
+          return;
+        }
+        try {
+          const updatedVideo = await VideoModel.findOneAndUpdate(
+            {
+              _id: videoId,
+            },
+            { ...video },
+            { new: true }
+          );
+          console.log(`views and likes updated Video`, updatedVideo);
+          res.json({
+            status: 201,
+            success: true,
+            message: `Video Edited Succesfully`,
+            video: updatedVideo,
+          });
+          return;
+        } catch (error) {
+          console.error(`error`, error);
+          res.status(500).json({
+            ...INTERNAL_SERVER_ERROR,
+            message: `somehting went wrong while upading likes or views`,
+            errorMessage: error.message,
+          });
+        }
       }
+
       res.json({
         ...RESPONSE.NOT_FOUND,
         message: `video not found`,
