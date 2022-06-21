@@ -10,6 +10,7 @@ const { router: playlists } = require("./routers/playlists.router");
 const { router: signup } = require(`./routers/signup.router`);
 const { router: login } = require("./routers/login.router");
 const { router: profile } = require(`./routers/profile.router`);
+const { router: payment } = require("./routers/payment.router");
 
 const { authVerify } = require(`./middlewares/auth.middleware`);
 const {
@@ -19,7 +20,7 @@ const { errorHandler } = require("./middlewares/error.middleware");
 dotenv.config();
 
 app.use(express.json());
-app.use(cors()); 
+app.use(cors());
 
 intiliazeDatabase();
 app.get(`/`, (req, res) => {
@@ -34,6 +35,7 @@ app.use(`/playlists`, authVerify, playlists);
 app.use(`/signup`, signup);
 app.use(`/login`, login);
 app.use(`/profile`, authVerify, profile);
+app.use("/payment", authVerify, payment);
 
 // DONT MOVE
 app.use(routeNotFoundHandler);
