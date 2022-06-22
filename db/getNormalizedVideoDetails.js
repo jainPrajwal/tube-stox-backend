@@ -21,8 +21,16 @@ const getNormalizedVideoDetails = (arr = getVideoDetails()) => {
           const normalizedObject = {
             url: item.id,
             category: promise.category,
-            views: 0,
-            likes: 0,
+            views: {
+              male: 0,
+              female: 0,
+              others: 0,
+            },
+            likes: {
+              male: 0,
+              female: 0,
+              others: 0,
+            },
             title: item.snippet.title,
             description: item.snippet.description,
             channelId: item.snippet.channelId,

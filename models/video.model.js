@@ -22,12 +22,32 @@ const VideoSchema = new Schema(
       required: getRequiredValidationMessage(`description `),
     },
     views: {
-      type: Number,
-      required: getRequiredValidationMessage(`Number of Views `),
+      male: {
+        type: Number,
+        required: getRequiredValidationMessage(`Number of Views `),
+      },
+      female: {
+        type: Number,
+        required: getRequiredValidationMessage(`Number of Views `),
+      },
+      others: {
+        type: Number,
+        required: getRequiredValidationMessage(`Number of Views `),
+      },
     },
     likes: {
-      type: Number,
-      required: getRequiredValidationMessage(`Number of likes `),
+      male: {
+        type: Number,
+        required: getRequiredValidationMessage(`Number of likes `),
+      },
+      female: {
+        type: Number,
+        required: getRequiredValidationMessage(`Number of likes `),
+      },
+      others: {
+        type: Number,
+        required: getRequiredValidationMessage(`Number of likes `),
+      },
     },
     channelId: {
       type: String,

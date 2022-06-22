@@ -16,6 +16,7 @@ const UserSchema = new Schema(
       type: String,
       required: getRequiredValidationMessage(`email `),
       unique: true,
+      immutable: true,
     },
     password: {
       type: String,
@@ -28,6 +29,12 @@ const UserSchema = new Schema(
     isAPremiumMember: {
       type: Boolean,
       default: false,
+    },
+    gender: {
+      type: String,
+      enum: [`male`, `female`, `others`],
+      immutable: true,
+      required: getRequiredValidationMessage(`gender `),
     },
   },
   options
