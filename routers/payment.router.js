@@ -5,7 +5,35 @@ const { PaymentModel } = require("../models/payment.model");
 
 const router = express.Router();
 
-router.post(`/`, async (req, res) => {
+router.get(`/`, async (req, res) => {
+  const { user } = req;
+  try {
+    const foundPayment = await PaymentModel.find({ user: user._id });
+    if (!foundPayment) {
+      res.status(404).json({
+        status: 404,
+        success: false,
+        message: `Payment Not Found`,
+      });
+      return;
+    }
+
+    res.json({
+      status: 200,
+      success: true,
+      message: `Payment Details found`,
+      payment: foundPayment,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 500,
+      success: false,
+      message: `somehting went wrong while fethcing the patment details`,
+      errorMessage: error.message,
+    });
+  }
+})
+.post(`/`, async (req, res) => {
   const { user } = req;
 
   const instance = new Razorpay({
@@ -46,7 +74,6 @@ router.post(`/verify`, async (req, res) => {
   } = req.body;
 
   const { user } = req;
-  
 
   let body = orderCreationId + "|" + razorpayPaymentId;
 
@@ -54,7 +81,7 @@ router.post(`/verify`, async (req, res) => {
     .createHmac(`sha256`, process.env.RAZORPAY_SECRET)
     .update(body.toString())
     .digest(`hex`);
- 
+
   if (expectedSignature === razorpaySignature) {
     const paymentToBeSavedToDatabase = {
       order_id: orderCreationId,
