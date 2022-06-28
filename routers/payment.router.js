@@ -56,7 +56,7 @@ router.get(`/`, async (req, res) => {
     });
     return;
   }
-  console.log(`order`, order);
+  
   res.status(200).json({
     status: 200,
     success: true,

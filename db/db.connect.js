@@ -12,9 +12,7 @@ const intiliazeDatabase = async () => {
           const videos = await getNormalizedVideoDetails();
           try {
             const response = await createModels(videos);
-            if (response) {
-              console.log(`success`);
-            }
+            
           } catch (error) {
             console.error(`error while creating models`, error);
           }

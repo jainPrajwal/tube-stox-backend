@@ -128,8 +128,6 @@ function updateVideoDetailsHandler() {
         { new: true }
       );
 
-      console.log(`this should be blank`, updatedVideoWhenUserIsAnOwner)
-
       if (updatedVideoWhenUserIsAnOwner) {
         res.json({
           status: 201,
