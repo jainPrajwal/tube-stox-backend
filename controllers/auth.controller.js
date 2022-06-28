@@ -97,7 +97,7 @@ function signupUser() {
         res.json(RESPONSE.MALFORMED_SYNTAX);
       }
     } catch (error) {
-      console.log(`error ocucred while saving user to the DB`, error);
+      console.error(`error ocucred while saving user to the DB`, error);
       res.json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
         message: `User Registration Failed`,

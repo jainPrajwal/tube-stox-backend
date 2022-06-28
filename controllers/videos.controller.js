@@ -133,7 +133,7 @@ function updateVideoDetailsHandler() {
           status: 201,
           success: true,
           message: `Video Edited Successfully`,
-          video: updatedVideoWhenUserIsAnOwner,
+          video: await updatedVideoWhenUserIsAnOwner.populate(`publisher`),
         });
         return;
       } else {
@@ -153,12 +153,12 @@ function updateVideoDetailsHandler() {
             { ...video },
             { new: true }
           );
-          console.log(`views and likes updated Video`, updatedVideo);
+
           res.json({
             status: 201,
             success: true,
             message: `Video Edited Succesfully`,
-            video: updatedVideo,
+            video: await VideoModel(updatedVideo).populate(`publisher`),
           });
           return;
         } catch (error) {

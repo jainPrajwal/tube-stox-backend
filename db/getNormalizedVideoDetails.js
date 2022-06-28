@@ -50,7 +50,7 @@ const getNormalizedVideoDetails = (arr = getVideoDetails()) => {
           resolve(finalArray);
         }
       } catch (error) {
-        console.log(`error`, error.message, promise.videoPromise);
+        console.error(`error`, error.message, promise.videoPromise);
         reject(error);
       }
     });

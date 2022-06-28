@@ -18,7 +18,7 @@ const getVideoDetails = () => {
       });
     }
   }
-  console.log(`ArrayOfPromises length`, ArrayOfPromises.length);
+  
   return ArrayOfPromises;
 };
 

@@ -49,7 +49,6 @@ function savePlaylistHandler() {
       user,
     } = req;
 
-    console.log(`user`, user);
     if (!user) {
       throw new Error(`User not found in playlists`);
     }
