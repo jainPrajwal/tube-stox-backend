@@ -128,6 +128,7 @@ function updateVideoDetailsHandler() {
         { new: true }
       );
 
+      
       if (updatedVideoWhenUserIsAnOwner) {
         res.json({
           status: 201,
