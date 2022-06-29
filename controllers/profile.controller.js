@@ -94,7 +94,7 @@ function updateProfileHandler() {
             name: updatedProfile.name,
             avatar: updatedProfile.avatar,
             email: updatedProfile.email,
-
+            gender: updatedProfile.gender,
             isAPremiumMember: updatedProfile.isAPremiumMember,
             publishedVideos,
           },
