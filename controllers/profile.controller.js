@@ -69,55 +69,53 @@ function updateProfileHandler() {
           errorMessage: error.message,
         });
       }
-
-      try {
-        const updatedProfile = await UserModel.findOneAndUpdate(
-          {
-            _id: user._id,
-          },
-          {
-            ...profile,
-          },
-          {
-            new: true,
-          }
-        );
-        try {
-          const publishedVideos = await VideoModel.find({
-            publisher: user._id,
-          });
-          res.json({
-            status: 200,
-            success: true,
-            message: `profile updated successfully`,
-            profile: {
-              name: updatedProfile.name,
-              avatar: updatedProfile.avatar,
-              email: updatedProfile.email,
-
-              isAPremiumMember: updatedProfile.isAPremiumMember,
-              publishedVideos,
-            },
-          });
-        } catch (error) {
-          res.json({
-            ...RESPONSE.INTERNAL_SERVER_ERROR,
-            message: `something went wrong while fetching videos published by you`,
-            errorMessage: error.message,
-          });
+    }
+    try {
+      const updatedProfile = await UserModel.findOneAndUpdate(
+        {
+          _id: user._id,
+        },
+        {
+          ...profile,
+        },
+        {
+          new: true,
         }
+      );
+      try {
+        const publishedVideos = await VideoModel.find({
+          publisher: user._id,
+        });
+        res.json({
+          status: 200,
+          success: true,
+          message: `profile updated successfully`,
+          profile: {
+            name: updatedProfile.name,
+            avatar: updatedProfile.avatar,
+            email: updatedProfile.email,
+
+            isAPremiumMember: updatedProfile.isAPremiumMember,
+            publishedVideos,
+          },
+        });
       } catch (error) {
-        console.error(`error`, error);
-        res.status(500).json({
-          status: 500,
-          success: false,
-          message: `something went wrong while upading the user profile`,
+        res.json({
+          ...RESPONSE.INTERNAL_SERVER_ERROR,
+          message: `something went wrong while fetching videos published by you`,
           errorMessage: error.message,
         });
       }
+    } catch (error) {
+      console.error(`error`, error);
+      res.status(500).json({
+        status: 500,
+        success: false,
+        message: `something went wrong while upading the user profile`,
+        errorMessage: error.message,
+      });
     }
   };
 }
 
 module.exports = { getProfileHandler, updateProfileHandler };
-
