@@ -2,6 +2,7 @@ const { UserModel } = require("../models/user.model");
 const { RESPONSE } = require("../utils/common.utils");
 const bcrypt = require(`bcrypt`);
 const jwt = require(`jsonwebtoken`);
+const { PlaylistModel } = require("../models/playlist.model");
 
 function signupUser() {
   return async (req, res) => {
@@ -80,14 +81,18 @@ function signupUser() {
                 name: savedUser.name,
                 email: savedUser.email,
                 avatar: savedUser.avatar,
+                gender: savedUser.gender,
+                isAPremiumMember: savedUser.isAPremiumMember,
               },
               token,
             });
           } catch (error) {
             await UserModel.deleteOne({ _id: savedUser._id });
-            res.json({
+            console.error(`error `, error.message);
+            res.status(500).json({
               status: 500,
               message: `error generating token`,
+              errorMessage: error.message,
             });
           }
         } else {
