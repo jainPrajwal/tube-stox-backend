@@ -25,14 +25,14 @@ function getPlaylistOfAUserHandler() {
         };
       }, {});
 
-      res.json({
+      res.status(200).json({
         status: 200,
         success: true,
         message: `playlists fetched successfully`,
         playlists,
       });
     } catch (error) {
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
 
         message: `something went wrong while fetching play lists from DB`,
@@ -55,7 +55,7 @@ function savePlaylistHandler() {
     try {
       if (playlist) {
         if (playlist.type !== `custom`) {
-          res.json({
+          res.status(400).json({
             status: 400,
             success: false,
             message: `Playlist is of type default playlist`,
@@ -66,7 +66,7 @@ function savePlaylistHandler() {
         playlist.videos = [];
         let savedPlaylist = await new PlaylistModel(playlist).save();
         if (savedPlaylist) {
-          res.json({
+          res.status(201).json({
             status: 201,
             success: true,
             message: `playlist saved succesfully to the DB`,
@@ -79,7 +79,7 @@ function savePlaylistHandler() {
         res.json(RESPONSE.MALFORMED_SYNTAX);
       }
     } catch (error) {
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
 
         message: `something went wrong while creating playlist`,
@@ -103,20 +103,20 @@ function updatePlaylistHandler() {
         { new: true }
       );
       if (!foundPlaylist) {
-        res.json({
+        res.status(404).json({
           ...RESPONSE.NOT_FOUND,
           message: `playlist ${playlistId} not found`,
         });
         return;
       }
-      res.json({
+      res.status(201).json({
         status: 201,
         success: true,
         message: `playlist updated successfully`,
         playlist: foundPlaylist,
       });
     } catch (error) {
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
         message: `something went wrong while updating the playlist`,
         errorMessage: error.message,
@@ -137,19 +137,19 @@ function deletePlaylistHandler() {
         isDefault: false,
       });
       if (!foundPlaylist) {
-        res.json({
+        res.status(404).json({
           ...RESPONSE.NOT_FOUND,
-          message: `playlist ${playlistId} not found`,
+          message: `playlist not found`,
         });
         return;
       }
-      res.json({
+      res.status(200).json({
         status: 200,
         success: true,
         message: `Playlist deleted sucessfully`,
       });
     } catch (error) {
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
         message: `something went wrong while deleting the playlist`,
         errorMessage: error.message,
@@ -160,7 +160,7 @@ function deletePlaylistHandler() {
 
 function updateVideoInAPlaylistHandler() {
   return async (req, res) => {
-    console.log(`update video in playlist called`)
+    console.log(`update video in playlist called`);
     const {
       params: { playlistId, videoId },
     } = req;
@@ -173,14 +173,14 @@ function updateVideoInAPlaylistHandler() {
       let updatedPlaylist;
 
       if (!foundPlaylist) {
-        res.json({
+        res.status(404).json({
           ...RESPONSE.NOT_FOUND,
           message: `Playlist not found!`,
         });
         return;
       }
       if (!video) {
-        res.json({
+        res.status(404).json({
           ...RESPONSE.NOT_FOUND,
           message: `Video not found!`,
         });
@@ -208,14 +208,14 @@ function updateVideoInAPlaylistHandler() {
       }
       updatedPlaylist = await foundPlaylist.save();
 
-      res.json({
+      res.status(201).json({
         status: 201,
         success: true,
         message: `Playlist Updated Succesfully`,
         video,
       });
     } catch (error) {
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
         message: `something went wrong while fetching playlsit from DB`,
         errorMessage: error.message,
@@ -234,7 +234,7 @@ function deleteVideoInAPlaylistHandler() {
       _id: playlistId,
     });
     if (!foundPlaylist) {
-      res.json({
+      res.status(404).json({
         ...RESPONSE.NOT_FOUND,
         message: `Playlist not found!`,
       });
@@ -242,7 +242,7 @@ function deleteVideoInAPlaylistHandler() {
     }
     const video = await VideoModel.findOne({ _id: videoId });
     if (!video) {
-      res.json({
+      res.status(404).json({
         ...RESPONSE.NOT_FOUND,
         message: `Video not found!`,
       });
@@ -254,7 +254,7 @@ function deleteVideoInAPlaylistHandler() {
     );
     foundPlaylist.videos = updatedVideosList;
     await foundPlaylist.save();
-    res.json({
+    res.status(200).json({
       status: 200,
       success: true,
       message: `Video Deleted Successfully`,
@@ -286,12 +286,12 @@ function saveVideoInAPlaylistHandler() {
         return;
       }
       if (foundPlaylist.type === `history`) {
-        console.log(`type history`)
+        console.log(`type history`);
         if (foundPlaylist.videos.some((id) => id.toString() === video._id)) {
           foundPlaylist.videos = foundPlaylist.videos.filter(
             (id) => id.toString() !== video._id
           );
-          console.log(`deleted already existing video`, foundPlaylist.videos)
+          console.log(`deleted already existing video`, foundPlaylist.videos);
         }
       }
       const updatedVideos = foundPlaylist.videos.concat(video);
@@ -330,21 +330,21 @@ function getSpecifiedTypeOfVideosHandler() {
       }).populate("videos");
 
       if (foundPlaylist.length <= 0) {
-        res.json({
+        res.status(404).json({
           ...RESPONSE.NOT_FOUND,
           message: `type not found in your playlist`,
         });
         return;
       }
 
-      res.json({
+      res.status(200).json({
         status: 200,
         success: true,
         message: `Playlist fetched successfully from the DB`,
         playlist: foundPlaylist,
       });
     } catch (error) {
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
         message: `something went wrong while fetching playlsit from DB`,
         errorMessage: error.message,

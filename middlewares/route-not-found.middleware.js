@@ -1,7 +1,7 @@
 const { RESPONSE } = require("../utils/common.utils");
 
 const routeNotFoundHandler = (req, res, next) => {
-  res.json({
+ res.status(404).json({
     ...RESPONSE.NOT_FOUND,
     message: `page not found`,
   });

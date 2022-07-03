@@ -22,7 +22,7 @@ const authVerify = async (req, res, next) => {
       res.json(RESPONSE.UNAUTHENTICATED_USER);
     }
   } catch (error) {
-    res.json({
+   res.status(500).json({
       ...RESPONSE.INTERNAL_SERVER_ERROR,
       message: `something went wrong while searching for user in DB`,
       errorMessage: error.message,

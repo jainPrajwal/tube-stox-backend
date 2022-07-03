@@ -13,7 +13,7 @@ function getProfileHandler() {
         owner: user._id,
       }).populate("videos");
     } catch (error) {
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
         message: `something went wrong while fetching playlist from the DB`,
         errorMessage: error.message,
@@ -22,7 +22,7 @@ function getProfileHandler() {
 
     try {
       const publishedVideos = await VideoModel.find({ publisher: user._id });
-      res.json({
+      res.status(200).json({
         status: 200,
         success: true,
         message: `Playlists and Published Videos fetched Successfully`,
@@ -36,7 +36,7 @@ function getProfileHandler() {
         },
       });
     } catch (error) {
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
         message: `something went wrong while fetching videos published bu you`,
         errorMessage: error.message,
@@ -86,7 +86,7 @@ function updateProfileHandler() {
         const publishedVideos = await VideoModel.find({
           publisher: user._id,
         });
-        res.json({
+        res.status(200).json({
           status: 200,
           success: true,
           message: `profile updated successfully`,
@@ -100,7 +100,7 @@ function updateProfileHandler() {
           },
         });
       } catch (error) {
-        res.json({
+        res.status(500).json({
           ...RESPONSE.INTERNAL_SERVER_ERROR,
           message: `something went wrong while fetching videos published by you`,
           errorMessage: error.message,

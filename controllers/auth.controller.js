@@ -38,7 +38,7 @@ function signupUser() {
 
             if (!token) {
               await UserModel.deleteOne({ _id: savedUser._id });
-              res.json({
+              res.status(500).json({
                 ...RESPONSE.INTERNAL_SERVER_ERROR,
                 message: `User Registration Failed`,
                 errorMessage: error.message,
@@ -74,7 +74,7 @@ function signupUser() {
             await new PlaylistModel(watchlater).save();
             await new PlaylistModel(liked).save();
 
-            res.json({
+            res.status(201).json({
               success: true,
               message: `User Registered Successfully`,
               user: {
@@ -103,7 +103,7 @@ function signupUser() {
       }
     } catch (error) {
       console.error(`error ocucred while saving user to the DB`, error);
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
         message: `User Registration Failed`,
         errorMessage: error.message,
@@ -125,7 +125,7 @@ function loginUser() {
             foundUser.password
           );
           if (!isPasswordValid) {
-            res.json({
+            res.status(401).json({
               ...RESPONSE.UNAUTHENTICATED_USER,
               message: `Invalid Password`,
             });
@@ -133,26 +133,26 @@ function loginUser() {
           }
 
           const token = jwt.sign({ _id: foundUser._id }, process.env.mySecret);
-          res.json({
+          res.status(201).json({
             status: 201,
             success: true,
             message: `Login Successful`,
             token,
           });
         } else
-          res.json({
+          res.status(401).json({
             ...RESPONSE.UNAUTHENTICATED_USER,
             message: `Invalid Email`,
           });
       } catch (error) {
-        res.json({
+        res.status(500).json({
           ...RESPONSE.INTERNAL_SERVER_ERROR,
           message: `something went wrong while loggin in..`,
           errorMessage: error.message,
         });
       }
     } else {
-      res.json(RESPONSE.MALFORMED_SYNTAX);
+      res.status(400).json(RESPONSE.MALFORMED_SYNTAX);
     }
   };
 }

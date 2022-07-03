@@ -10,14 +10,14 @@ function getNotesForAVideoHandler() {
 
     try {
       const notes = await NoteModel.find({ video: videoId, user: user._id });
-      res.json({
+      res.status(200).json({
         status: 200,
         success: true,
         message: `notes fetched successfully from DB`,
         notes,
       });
     } catch (error) {
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
         message: `something went wrong while fetching notes from DB`,
         errorMessage: error.message,
@@ -34,7 +34,7 @@ function saveNoteHandler() {
       user,
     } = req;
     if (!note) {
-      res.json({
+      res.status(400).json({
         ...RESPONSE.MALFORMED_SYNTAX,
         message: `Invalid note sent`,
       });
@@ -45,14 +45,14 @@ function saveNoteHandler() {
       note.user = user._id;
       note.video = videoId;
       const savedNote = await new NoteModel({ ...note }).save();
-      res.json({
+      res.status(201).json({
         status: 201,
         success: true,
         message: `note created succesfully`,
         note: savedNote,
       });
     } catch (error) {
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
         message: `somehtibng went wrong while updating note`,
         errorMessage: error.message,
@@ -70,7 +70,7 @@ function updateNoteHandler() {
     } = req;
 
     if (!note) {
-      res.json({
+      res.status(400).json({
         ...RESPONSE.MALFORMED_SYNTAX,
         message: `Invalid note sent`,
       });
@@ -84,13 +84,13 @@ function updateNoteHandler() {
         { new: true }
       );
 
-      res.json({
+      res.status(200).json({
         status: 200,
         message: `Note updated successfully`,
         note: updatedNote,
       });
     } catch (error) {
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
         message: `something went wrong while updating the note`,
         errorMessage: error.message,

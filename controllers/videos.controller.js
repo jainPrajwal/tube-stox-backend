@@ -31,7 +31,7 @@ function getAllVideosHandler() {
         .limit(limit)
         .skip(startIndex);
 
-      res.json({
+      res.status(200).json({
         status: 200,
         success: true,
         message: `videos fetched sucessfully`,
@@ -40,7 +40,7 @@ function getAllVideosHandler() {
       });
     } catch (error) {
       console.error(`some error occured while getting videos from DB`, error);
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
 
         message: `some error occured while getting videos from DB`,
@@ -58,20 +58,20 @@ function saveVideoHandler() {
       if (video) {
         video.publisher = user._id;
         let savedVideo = await saveVideo(video);
-        res.json({
+        res.status(201).json({
           status: 201,
           success: true,
           message: `video saved to database succesfully`,
           video: savedVideo,
         });
       } else {
-        res.json({
+        res.status(404).json({
           ...RESPONSE.NOT_FOUND,
           message: `The request could not be understood by the server due to malformed syntax.`,
         });
       }
     } catch (error) {
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
         success: false,
         message: `something went wrong while saving video to DB`,
@@ -89,7 +89,7 @@ function getVideoByVideoIdHandler() {
     try {
       const foundVideo = await getVideoByVideoId(videoId);
       if (foundVideo) {
-        res.json({
+        res.status(200).json({
           status: 200,
           success: true,
           message: `Video fetched Successfully`,
@@ -97,12 +97,12 @@ function getVideoByVideoIdHandler() {
         });
         return;
       }
-      res.json({
+      res.status(404).json({
         ...RESPONSE.NOT_FOUND,
         message: `Video not found`,
       });
     } catch (error) {
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
         message: `something went wrong while fethcing video`,
         errorMessage: error.message,
@@ -128,9 +128,8 @@ function updateVideoDetailsHandler() {
         { new: true }
       );
 
-      
       if (updatedVideoWhenUserIsAnOwner) {
-        res.json({
+        res.status(201).json({
           status: 201,
           success: true,
           message: `Video Edited Successfully`,
@@ -155,7 +154,7 @@ function updateVideoDetailsHandler() {
             { new: true }
           );
 
-          res.json({
+          res.status(201).json({
             status: 201,
             success: true,
             message: `Video Edited Succesfully`,
@@ -172,12 +171,12 @@ function updateVideoDetailsHandler() {
         }
       }
 
-      res.json({
+      res.status(404).json({
         ...RESPONSE.NOT_FOUND,
         message: `video not found`,
       });
     } catch (error) {
-      res.json({
+      res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
         message: `something went wrong while editing video details`,
         errorMessage: error.message,

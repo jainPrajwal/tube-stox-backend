@@ -24,7 +24,7 @@ app.use(cors());
 
 intiliazeDatabase();
 app.get(`/`, (req, res) => {
-  res.json({
+ res.status(200).json({
     success: true,
     message: `up and running`,
   });
