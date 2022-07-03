@@ -19,7 +19,7 @@ const RESPONSE = {
   UNAUTHENTICATED_USER: {
     status: 401,
     success: false,
-    message: `user not authenticated. Invalid token`,
+    message: `Please login to avail these features`,
   },
   NOT_FOUND: {
     status: 404,
