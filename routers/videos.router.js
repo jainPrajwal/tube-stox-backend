@@ -11,6 +11,7 @@ const {
   getNotesForAVideoHandler,
   saveNoteHandler,
   updateNoteHandler,
+  deleteNoteHandler,
 } = require("../controllers/notes.controller");
 
 router
@@ -28,5 +29,5 @@ router
   .get(authVerify, getNotesForAVideoHandler())
   .post(authVerify, saveNoteHandler());
 
-router.route(`/:videoId/notes/:noteId`).post(updateNoteHandler());
+router.route(`/:videoId/notes/:noteId`).post(authVerify, updateNoteHandler()).delete(authVerify, deleteNoteHandler())
 module.exports = { router };

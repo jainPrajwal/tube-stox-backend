@@ -100,8 +100,33 @@ function updateNoteHandler() {
   };
 }
 
+function deleteNoteHandler() {
+  return async (req, res) => {
+    const {
+      params: { videoId, noteId },
+    } = req;
+    const foundNote = await NoteModel.findOneAndDelete({
+      _id: noteId,
+    });
+    if (!foundNote) {
+      res.status(404).json({
+        ...RESPONSE.NOT_FOUND,
+        message: `Note not found!`,
+      });
+      return;
+    }
+    res.status(200).json({
+      status: 200,
+      success: true,
+      message: `Video Deleted Successfully`,
+      note: foundNote,
+    });
+  };
+}
+
 module.exports = {
   getNotesForAVideoHandler,
   updateNoteHandler,
   saveNoteHandler,
+  deleteNoteHandler,
 };
