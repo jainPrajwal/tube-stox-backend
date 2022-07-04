@@ -88,6 +88,7 @@ function updateNoteHandler() {
         status: 201,
         message: `Note updated successfully`,
         note: updatedNote,
+        success: true,
       });
     } catch (error) {
       res.status(500).json({
