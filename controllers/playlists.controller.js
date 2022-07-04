@@ -147,6 +147,7 @@ function deletePlaylistHandler() {
         status: 200,
         success: true,
         message: `Playlist deleted sucessfully`,
+        playlist: foundPlaylist
       });
     } catch (error) {
       res.status(500).json({
