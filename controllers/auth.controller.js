@@ -14,7 +14,7 @@ function signupUser() {
         });
 
         if (userWithSameEmailId) {
-          res.json(RESPONSE.CONFLICTING_RESOURCE);
+          res.status(409).json(RESPONSE.CONFLICTING_RESOURCE);
           return;
         }
 
