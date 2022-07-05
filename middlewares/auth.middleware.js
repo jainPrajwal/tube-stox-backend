@@ -4,12 +4,12 @@ const { RESPONSE } = require("../utils/common.utils");
 
 const authVerify = async (req, res, next) => {
   const token = req.headers.authorization?.split(` `)[1];
- 
+
   if (!token) {
-    res.json(RESPONSE.UNAUTHENTICATED_USER);
+    res.status(401).json(RESPONSE.UNAUTHENTICATED_USER);
     return;
   }
-  
+
   try {
     const { _id: userId } = jwt.verify(token, process.env.mySecret);
 
@@ -19,10 +19,10 @@ const authVerify = async (req, res, next) => {
       req.user = user;
       next();
     } catch (error) {
-      res.json(RESPONSE.UNAUTHENTICATED_USER);
+      res.status(401).json(RESPONSE.UNAUTHENTICATED_USER);
     }
   } catch (error) {
-   res.status(500).json({
+    res.status(500).json({
       ...RESPONSE.INTERNAL_SERVER_ERROR,
       message: `something went wrong while searching for user in DB`,
       errorMessage: error.message,

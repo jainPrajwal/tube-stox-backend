@@ -86,8 +86,8 @@ function updateProfileHandler() {
         const publishedVideos = await VideoModel.find({
           publisher: user._id,
         });
-        res.status(200).json({
-          status: 200,
+        res.status(201).json({
+          status: 201,
           success: true,
           message: `profile updated successfully`,
           profile: {
