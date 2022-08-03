@@ -26,17 +26,21 @@ function getAllVideosHandler() {
         pagination.next = pageNo + 1;
       }
 
-      let videos = await VideoModel.find({})
-        .sort(`-createdAt`)
-        .populate(`publisher`)
-        .limit(limit)
-        .skip(startIndex);
+      let allVideos = await VideoModel.find({}).populate(`publisher`);
+
+      allVideos = allVideos.reverse().slice(startIndex, startIndex + limit);
+
+      // let videos = await VideoModel.find({})
+      //   .sort(`-createdAt`)
+      //   .populate(`publisher`)
+      //   .limit(limit)
+      //   .skip(startIndex);
 
       res.status(200).json({
         status: 200,
         success: true,
         message: `videos fetched sucessfully`,
-        videos,
+        videos: allVideos,
         pagination,
       });
     } catch (error) {
