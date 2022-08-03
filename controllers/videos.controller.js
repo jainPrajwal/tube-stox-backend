@@ -27,6 +27,7 @@ function getAllVideosHandler() {
       }
 
       let videos = await VideoModel.find({})
+        .sort(`-createdAt`)
         .populate(`publisher`)
         .limit(limit)
         .skip(startIndex);
@@ -44,6 +45,89 @@ function getAllVideosHandler() {
         ...RESPONSE.INTERNAL_SERVER_ERROR,
 
         message: `some error occured while getting videos from DB`,
+        errorMessage: error.errorMessage,
+      });
+    }
+  };
+}
+
+function getMostWatchedVideosHandler() {
+  return async (req, res) => {
+    try {
+      let videos = await VideoModel.find({}).populate(`publisher`);
+
+      if (videos) {
+        let mostWatched = [];
+        mostWatched = [...videos]
+          .sort((video1, video2) => {
+            const totalViews1 =
+              video1.views.male + video1.views.female + video1.views.others;
+            const totalViews2 =
+              video2.views.male + video2.views.female + video2.views.others;
+            return totalViews2 - totalViews1;
+          })
+          .slice(0, 4);
+
+        res.status(200).json({
+          status: 200,
+          success: true,
+          message: `videos fetched sucessfully`,
+          videos: mostWatched,
+        });
+      }
+    } catch (error) {
+      console.error(`some error occured while getting most videos`, error);
+      res.status(500).json({
+        ...RESPONSE.INTERNAL_SERVER_ERROR,
+        message: `some error occured while getting most watched videos`,
+        errorMessage: error.errorMessage,
+      });
+    }
+  };
+}
+
+function getTrendingVideosHandler() {
+  return async (req, res) => {
+    try {
+      let videos = await VideoModel.find({}).populate(`publisher`).limit(10);
+
+      if (videos) {
+        const trendingVideos = [...videos].sort((video1, video2) => {
+          const currentTime = new Date().getMilliseconds();
+          const timeElapsed2 =
+            currentTime - new Date(video2.createdAt).getMilliseconds();
+          const timeElapsed1 =
+            currentTime - new Date(video1.createdAt).getMilliseconds();
+
+          let totalVideo2Views =
+            video2.views.female + video2.views.male + video2.views.others;
+          let totalVideo1Views =
+            video1.views.female + video1.views.male + video1.views.others;
+          /* if (totalVideo2Views === 0) {
+            totalVideo2Views = -1;
+          }
+
+          if (totalVideo1Views === 0) {
+            totalVideo1Views = -1;
+          } */
+          return (
+            parseInt(timeElapsed2 % totalVideo2Views, 10) -
+            parseInt(timeElapsed1 % totalVideo1Views, 10)
+          );
+        });
+
+        res.status(200).json({
+          status: 200,
+          success: true,
+          message: `videos fetched sucessfully`,
+          videos: trendingVideos,
+        });
+      }
+    } catch (error) {
+      console.error(`some error occured while getting most videos`, error);
+      res.status(500).json({
+        ...RESPONSE.INTERNAL_SERVER_ERROR,
+        message: `some error occured while getting most watched videos`,
         errorMessage: error.errorMessage,
       });
     }
@@ -190,4 +274,6 @@ module.exports = {
   saveVideoHandler,
   getVideoByVideoIdHandler,
   updateVideoDetailsHandler,
+  getMostWatchedVideosHandler,
+  getTrendingVideosHandler,
 };
