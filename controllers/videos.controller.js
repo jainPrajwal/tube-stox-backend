@@ -97,11 +97,13 @@ function getTrendingVideosHandler() {
 
       if (videos) {
         const trendingVideos = [...videos].sort((video1, video2) => {
-          const currentTime = new Date().getMilliseconds();
-          const timeElapsed2 =
-            currentTime - new Date(video2.createdAt).getMilliseconds();
+          const currentTime = new Date().getTime();
           const timeElapsed1 =
-            currentTime - new Date(video1.createdAt).getMilliseconds();
+            currentTime - new Date(video1.createdAt).getTime();
+          const timeElapsed2 =
+            currentTime - new Date(video2.createdAt).getTime();
+         
+          
 
           let totalVideo2Views =
             video2.views.female + video2.views.male + video2.views.others;
@@ -115,8 +117,8 @@ function getTrendingVideosHandler() {
             totalVideo1Views = -1;
           } */
           return (
-            parseInt(timeElapsed2 % totalVideo2Views, 10) -
-            parseInt(timeElapsed1 % totalVideo1Views, 10)
+            parseInt(timeElapsed1 / totalVideo1Views, 10)-
+            parseInt(timeElapsed2 / totalVideo2Views, 10) 
           );
         });
 
@@ -273,6 +275,34 @@ function updateVideoDetailsHandler() {
   };
 }
 
+function getUploadedVideosByUserHandler() {
+  return async (req, res) => {
+    try {
+      const { user } = req;
+      if (!user) {
+        res.status(404).json({
+          success: false,
+          message: `User not found`,
+        });
+        return;
+      }
+      const uploadedVideos = await VideoModel.find({
+        publisher: user._id,
+      }).populate(`publisher`);
+      res.status(200).json({
+        success: true,
+        message: `videos uploaded by user fetched successfully`,
+        videos: uploadedVideos,
+      });
+    } catch (error) {
+      console.error(`error `, error);
+      res.status(500).json({
+        success: false,
+        message: `something went wrong while fetching uploaded videos by user`,
+      });
+    }
+  };
+}
 module.exports = {
   getAllVideosHandler,
   saveVideoHandler,
@@ -280,4 +310,5 @@ module.exports = {
   updateVideoDetailsHandler,
   getMostWatchedVideosHandler,
   getTrendingVideosHandler,
+  getUploadedVideosByUserHandler,
 };

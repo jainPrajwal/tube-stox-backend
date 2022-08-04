@@ -8,6 +8,7 @@ const {
   updateVideoDetailsHandler,
   getMostWatchedVideosHandler,
   getTrendingVideosHandler,
+  getUploadedVideosByUserHandler,
 } = require("../controllers/videos.controller");
 const {
   getNotesForAVideoHandler,
@@ -21,17 +22,14 @@ router
   .get(getAllVideosHandler())
   .post(authVerify, saveVideoHandler());
 
+router.route(/^\/mostWatched$/).get(getMostWatchedVideosHandler());
+router.route(/^\/trending$/).get(getTrendingVideosHandler());
+router.route(/^\/upload$/).get(authVerify, getUploadedVideosByUserHandler());
 
-  router.route(/^\/mostWatched$/).get(getMostWatchedVideosHandler());
-  router.route(/^\/trending$/).get(getTrendingVideosHandler());
-
-
-  router
+router
   .route(`/:videoId`)
   .get(getVideoByVideoIdHandler())
   .post(authVerify, updateVideoDetailsHandler());
-  
-
 
 router
   .route(`/:videoId/notes`)

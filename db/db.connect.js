@@ -31,7 +31,7 @@ const intiliazeDatabase = async () => {
 module.exports = { intiliazeDatabase };
 
 function createModels(videos) {
-  console.log(`creating models`);
+ 
   let modelsCreated = 0;
   return new Promise((resolve, reject) => {
     videos.forEach(async (video) => {

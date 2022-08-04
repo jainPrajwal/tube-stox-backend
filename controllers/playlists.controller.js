@@ -161,7 +161,7 @@ function deletePlaylistHandler() {
 
 function updateVideoInAPlaylistHandler() {
   return async (req, res) => {
-    console.log(`update video in playlist called`);
+ 
     const {
       params: { playlistId, videoId },
     } = req;
@@ -287,12 +287,12 @@ function saveVideoInAPlaylistHandler() {
         return;
       }
       if (foundPlaylist.type === `history`) {
-        console.log(`type history`);
+     
         if (foundPlaylist.videos.some((id) => id.toString() === video._id)) {
           foundPlaylist.videos = foundPlaylist.videos.filter(
             (id) => id.toString() !== video._id
           );
-          console.log(`deleted already existing video`, foundPlaylist.videos);
+         
         }
       }
       const updatedVideos = foundPlaylist.videos.concat(video);
