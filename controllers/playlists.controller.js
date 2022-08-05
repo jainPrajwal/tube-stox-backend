@@ -7,7 +7,10 @@ function getPlaylistOfAUserHandler() {
     const { user } = req;
 
     if (!user) {
-      throw new Error(`User not found in playlists`);
+      res.status(404).json({
+        success: false,
+        message: `User not found in playlists`,
+      });
     }
     try {
       const playlists = await PlaylistModel.find({ owner: user._id }).populate(
@@ -50,7 +53,10 @@ function savePlaylistHandler() {
     } = req;
 
     if (!user) {
-      throw new Error(`User not found in playlists`);
+      res.status(404).json({
+        success: false,
+        message: `User not found in playlists`,
+      });
     }
     try {
       if (playlist) {
@@ -147,7 +153,7 @@ function deletePlaylistHandler() {
         status: 200,
         success: true,
         message: `Playlist deleted sucessfully`,
-        playlist: foundPlaylist
+        playlist: foundPlaylist,
       });
     } catch (error) {
       res.status(500).json({
@@ -161,7 +167,6 @@ function deletePlaylistHandler() {
 
 function updateVideoInAPlaylistHandler() {
   return async (req, res) => {
- 
     const {
       params: { playlistId, videoId },
     } = req;
@@ -287,12 +292,10 @@ function saveVideoInAPlaylistHandler() {
         return;
       }
       if (foundPlaylist.type === `history`) {
-     
         if (foundPlaylist.videos.some((id) => id.toString() === video._id)) {
           foundPlaylist.videos = foundPlaylist.videos.filter(
             (id) => id.toString() !== video._id
           );
-         
         }
       }
       const updatedVideos = foundPlaylist.videos.concat(video);
