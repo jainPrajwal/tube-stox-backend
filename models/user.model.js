@@ -21,6 +21,13 @@ const UserSchema = new Schema(
     password: {
       type: String,
       required: getRequiredValidationMessage(`password `),
+      validate: {
+        validator: function (value) {
+          return /^(?=.*[A-Z])(?=.*\d).{8,}$/g.test(value);
+        },
+        message: () =>
+          `Password should contain atleast 6 characters (atleast one number & one upper case letter)`,
+      },
     },
     avatar: {
       type: String,
