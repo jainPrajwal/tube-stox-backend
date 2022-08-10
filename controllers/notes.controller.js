@@ -13,13 +13,13 @@ function getNotesForAVideoHandler() {
       res.status(200).json({
         status: 200,
         success: true,
-        message: `notes fetched successfully from DB`,
+        message: `Notes fetched successfully`,
         notes,
       });
     } catch (error) {
       res.status(500).json({
         ...RESPONSE.INTERNAL_SERVER_ERROR,
-        message: `something went wrong while fetching notes from DB`,
+        message: `Something went wrong while fetching notes`,
         errorMessage: error.message,
       });
     }
@@ -48,7 +48,7 @@ function saveNoteHandler() {
       res.status(201).json({
         status: 201,
         success: true,
-        message: `note created succesfully`,
+        message: `Note created succesfully`,
         note: savedNote,
       });
     } catch (error) {
@@ -118,7 +118,7 @@ function deleteNoteHandler() {
     res.status(200).json({
       status: 200,
       success: true,
-      message: `Video Deleted Successfully`,
+      message: `Note deleted Successfully`,
       note: foundNote,
     });
   };
